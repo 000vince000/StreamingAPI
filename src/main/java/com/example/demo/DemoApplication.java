@@ -34,7 +34,7 @@ public class DemoApplication {
 			reader.readLine(); // skip headers
 			String csvLine;
 			while((csvLine = reader.readLine()) != null) {
-				System.out.println(String.format("parsing %s", csvLine));
+//				System.out.println(String.format("parsing %s", csvLine));
 				controller.sendCsvLine(csvLine);
 			}
 		} catch (IOException e) {

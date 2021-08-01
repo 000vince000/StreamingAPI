@@ -21,6 +21,7 @@ import java.io.OutputStreamWriter;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 
 @RequestMapping("/api/stream")
@@ -54,12 +55,12 @@ public class ApiController {
             loan.setState(parsedFields[STATE]);
 
             System.out.println(String.format("stream received: %s", loan));
-            Facility sourcedFacility = loanService.sourceLoan(loan);
-            assignmentService.writeAssignment(loan.getId(), sourcedFacility.getId());
-            BigDecimal yield = loanService.calculateYield(loan, sourcedFacility.getInterestRate());
-
-            System.out.println(String.format("==> yield calculated: %.2f", yield));
-
+            Optional<Facility> sourcedFacility = loanService.sourceLoan(loan);
+            sourcedFacility.ifPresent(facility -> {
+                assignmentService.writeAssignment(loan.getId(), facility.getId());
+                BigDecimal yield = loanService.calculateYield(loan, facility);
+                System.out.println(String.format("==> yield calculated: %.2f", yield));
+            });
         } catch (IOException | IllegalStateException e) {
             e.printStackTrace();
         }
@@ -88,6 +89,4 @@ public class ApiController {
                 .contentType(MediaType.TEXT_PLAIN)
                 .body(stream);
     }
-
-
 }
