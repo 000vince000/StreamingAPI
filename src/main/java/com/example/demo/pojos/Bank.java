@@ -1,19 +1,15 @@
 package com.example.demo.pojos;
 
+import com.opencsv.bean.CsvBindByName;
 import lombok.Getter;
 import lombok.Setter;
 
 public class Bank {
-    @Getter @Setter private Integer id;
-    @Getter @Setter private String bankName;
+    @Getter @Setter @CsvBindByName(column="id") private Integer id;
+    @Getter @Setter @CsvBindByName(column="name") private String name;
 
-    Bank(Integer id, String bankName){
-        super();
-        this.id = id;
-        this.bankName = bankName;
-    }
     @Override
     public String toString() {
-        return "Bank [id=" + id + ", bankName=" + bankName + "]";
+        return "Bank [id=" + id + ", Name=" + name + "]";
     }
 }
