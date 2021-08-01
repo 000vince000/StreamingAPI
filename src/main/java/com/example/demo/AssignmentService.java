@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 public class AssignmentService {
     private Writer writer;
@@ -33,8 +34,9 @@ public class AssignmentService {
         }
     }
 
-    public void writeAssignment(Integer loanId, Integer facilityId){
-        csvWriter.writeNext(new String[] {loanId.toString(), facilityId.toString()});
+    public void writeAssignment(Integer loanId, Optional<Integer> facilityId){
+        String facilityIdString = facilityId.isPresent()?facilityId.get().toString():"";
+        csvWriter.writeNext(new String[] {loanId.toString(), facilityIdString});
     }
 
     protected void finalize() throws Throwable{

@@ -2,7 +2,9 @@ package com.example.demo;
 
 import com.example.demo.pojos.Facility;
 import com.example.demo.pojos.Loan;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+
+import javax.websocket.server.PathParam;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -27,9 +31,9 @@ import java.util.Optional;
 @RequestMapping("/api/stream")
 @RestController
 public class ApiController {
-    private final static String BANK_CSV = "small/banks.csv";
-    private final static String COVENANT_CSV = "small/covenants.csv";
-    private final static String FACILITY_CSV = "small/facilities.csv";
+    private static String BANK_CSV = "large/banks.csv";
+    private static String COVENANT_CSV = "large/covenants.csv";
+    private static String FACILITY_CSV = "large/facilities.csv";
 
     LoanService loanService = new LoanService(BANK_CSV,COVENANT_CSV,FACILITY_CSV);
     AssignmentService assignmentService = new AssignmentService();
@@ -56,11 +60,14 @@ public class ApiController {
 
             System.out.println(String.format("stream received: %s", loan));
             Optional<Facility> sourcedFacility = loanService.sourceLoan(loan);
-            sourcedFacility.ifPresent(facility -> {
-                assignmentService.writeAssignment(loan.getId(), facility.getId());
-                BigDecimal yield = loanService.calculateYield(loan, facility);
+            if (sourcedFacility.isPresent()) {
+                assignmentService.writeAssignment(loan.getId(), sourcedFacility.map(Facility::getId));
+                BigDecimal yield = loanService.calculateYield(loan, sourcedFacility.get());
                 System.out.println(String.format("==> yield calculated: %.2f", yield));
-            });
+            } else {
+                assignmentService.writeAssignment(loan.getId(), Optional.empty());
+                System.out.println(String.format("==> yield calculated: NONE"));
+            }
         } catch (IOException | IllegalStateException e) {
             e.printStackTrace();
         }

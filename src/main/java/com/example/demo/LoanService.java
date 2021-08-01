@@ -34,7 +34,6 @@ public class LoanService {
     public Optional<Facility> sourceLoan(Loan loan) throws IllegalStateException {
         //1. get facility IDs from covenants where state is not banned and default rate < max default allowable
         Set<Integer> sanitizedFacilityIds = covenants.stream()
-				.filter(covenant -> covenant.getBannedState() != loan.getState())
                 .filter(covenant -> covenant.getMaxDefaultLikelihood() != null ?
                         covenant.getMaxDefaultLikelihood().compareTo(loan.getDefaultLikelihood()) > 0 : true)
                 .map(Covenant::getFacilityId)
@@ -43,6 +42,7 @@ public class LoanService {
         //2. find facilities with lower interest rates and where there is spare loan capacity
         Optional<Facility> faciltyWithMinRate = facilities.stream()
                 .filter(facility -> facility.getInterestRate().compareTo(loan.getInterestRate()) < 0)
+                .filter(facility -> !covenantService.getBannedStatesByFacilityId(facility.getId()).contains(loan.getState())) //TODO
                 .filter(facility -> sanitizedFacilityIds.contains(facility.getId()))
                 .filter(facility -> loan.getAmount().compareTo(facilityService.getWorkingCapacityByFacilityId(facility.getId())) < 0)
                 .collect(Collectors.minBy(Comparator.comparing(Facility::getInterestRate)));

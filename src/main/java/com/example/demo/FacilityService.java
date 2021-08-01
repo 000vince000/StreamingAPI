@@ -50,7 +50,7 @@ public class FacilityService {
     public BigDecimal adjustRunningYieldMap(Integer facilityId, BigDecimal yield){
         BigDecimal currentYield = runningYieldMap.get(facilityId);
         BigDecimal adjustedRunningYield =  currentYield !=null ? currentYield.add(yield) : yield;
-        System.out.println(String.format("facility %d's running yield is augmented from %.2f to %.2f", facilityId, currentYield==null?0:currentYield, adjustedRunningYield));
+        System.out.println(String.format("facility %d's running yield is augmented from %.2f to %.2f", facilityId, currentYield==null?new BigDecimal(0):currentYield, adjustedRunningYield));
         runningYieldMap.put(facilityId,adjustedRunningYield);
         return adjustedRunningYield;
     }
@@ -95,7 +95,7 @@ public class FacilityService {
 
             //write results
             runningYieldMap.entrySet().forEach(set -> {
-                csvWriter.writeNext(new String[] {set.getKey().toString(), Integer.toString(set.getValue().round(new MathContext(3, RoundingMode.CEILING)).intValue())});
+                csvWriter.writeNext(new String[] {set.getKey().toString(), Integer.toString(set.getValue().setScale(0, BigDecimal.ROUND_HALF_UP).intValue())});
             });
 
             csvWriter.close();
