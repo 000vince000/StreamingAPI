@@ -27,13 +27,7 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 
 		//initialization
-//		LoanService loanService = new LoanService(LOAN_CSV);
-
 		ApiController controller = new ApiController();
-
-//		List<Facility> facilities = facilityService.getFacilityList();
-//		List<Loan> loans = loanService.getLoanList();
-//		List<Covenant> covenants = covenantService.getCovenantList();
 
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(LOAN_CSV));
@@ -46,18 +40,6 @@ public class DemoApplication {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//
-//		loans.stream().forEach(loan -> {
-//			List<Integer> facilityIds = facilities.stream()
-//				.filter(facility -> facility.getInterestRate().compareTo(loan.getInterestRate()) < 0)
-//				.map(Facility::getId)
-//				.collect(Collectors.toList());
-//			List<String> bannedStates = covenants.stream()
-//				.filter(covenant -> facilityIds.contains(covenant.getFacilityId()))
-//				.map(covenant -> covenant.getBannedState())
-//				.collect(Collectors.toList());
-//
-//		});
 	}
 
 }

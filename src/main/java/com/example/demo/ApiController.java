@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -23,7 +21,6 @@ import java.io.OutputStreamWriter;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
 
 
 @RequestMapping("/api/stream")
@@ -34,6 +31,7 @@ public class ApiController {
     private final static String FACILITY_CSV = "small/facilities.csv";
 
     LoanService loanService = new LoanService(BANK_CSV,COVENANT_CSV,FACILITY_CSV);
+    AssignmentService assignmentService = new AssignmentService();
 
     @PostMapping(value="/csv")
     public void sendCsvLine(@RequestParam("csvLine") String csvLine) {
@@ -57,7 +55,7 @@ public class ApiController {
 
             System.out.println(String.format("stream received: %s", loan));
             Facility sourcedFacility = loanService.sourceLoan(loan);
-            AssignmentService.writeAssignment(loan.getId(), sourcedFacility.getId());
+            assignmentService.writeAssignment(loan.getId(), sourcedFacility.getId());
             BigDecimal yield = loanService.calculateYield(loan, sourcedFacility.getInterestRate());
             System.out.println(String.format("==> yield calculated: %.2f", yield));
 
