@@ -5,9 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class Covenant {
     @Getter @Setter @CsvBindByName(column="facility_id") private Integer facilityId;
@@ -18,7 +15,7 @@ public class Covenant {
     @Override
     public String toString() {
         return "Covenant [facilityId=" +facilityId
-                +"maxDefaultLikelihood=" + maxDefaultLikelihood
+                +", maxDefaultLikelihood=" + maxDefaultLikelihood
                 + ", bannedState="
                 + bannedState
                 + "]";

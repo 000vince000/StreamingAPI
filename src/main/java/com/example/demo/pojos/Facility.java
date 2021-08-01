@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 public class Facility {
     @Getter @Setter @CsvBindByName(column="id") private Integer id;
     @Getter @Setter @CsvBindByName(column="bank_id") private Integer bankId;
-    @Getter @Setter @CsvBindByName(column="id") private BigDecimal interestRate;
-    @Getter @Setter private BigDecimal amount;
+    @Getter @Setter @CsvBindByName(column="interest_rate") private BigDecimal interestRate;
+    @Getter @Setter @CsvBindByName(column="amount") private BigDecimal amount;
 
     @Override
     public String toString() {
