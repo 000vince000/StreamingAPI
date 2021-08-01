@@ -30,5 +30,4 @@ public class DemoApplication {
 			e.printStackTrace();
 		}
 	}
-
 }

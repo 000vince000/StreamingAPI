@@ -3,7 +3,6 @@ package com.example.demo;
 import com.example.demo.pojos.Covenant;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.Getter;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;

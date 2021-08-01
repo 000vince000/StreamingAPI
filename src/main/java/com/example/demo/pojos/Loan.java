@@ -13,20 +13,8 @@ public class Loan {
     @Getter @Setter @CsvBindByName(column="default_likelihood") private BigDecimal defaultLikelihood;
     @Getter @Setter @CsvBindByName(column="state") private String state;
 
-
-    //TODO
     @Override
     public String toString() {
-        return "Loan [id="
-                + id
-                + ", amount="
-                + amount
-                + ", interestRate="
-                + interestRate
-                + ", defaultLikelihood="
-                + defaultLikelihood
-                + ", state="
-                + state
-                + "]";
+        return "Loan [id=" + id + ", amount="+ amount+ ", interestRate="+ interestRate+ ", defaultLikelihood="+ defaultLikelihood+ ", state="+ state+ "]";
     }
 }

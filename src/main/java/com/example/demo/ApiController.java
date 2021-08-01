@@ -2,9 +2,6 @@ package com.example.demo;
 
 import com.example.demo.pojos.Facility;
 import com.example.demo.pojos.Loan;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
-import javax.websocket.server.PathParam;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;

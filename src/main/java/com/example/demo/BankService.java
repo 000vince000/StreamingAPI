@@ -24,7 +24,6 @@ public class BankService {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-//        banks.forEach(System.out::println);
         return banks;
     }
 }

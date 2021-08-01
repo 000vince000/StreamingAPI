@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 public class LoanService {
 //    @Getter private List<Loan> loanList;
-
     private BankService bankService;
     private CovenantService covenantService;
     private FacilityService facilityService;

@@ -14,10 +14,6 @@ public class Covenant {
 
     @Override
     public String toString() {
-        return "Covenant [facilityId=" +facilityId
-                +", maxDefaultLikelihood=" + maxDefaultLikelihood
-                + ", bannedState="
-                + bannedState
-                + "]";
+        return "Covenant [facilityId=" +facilityId+", maxDefaultLikelihood=" + maxDefaultLikelihood+ ", bannedState="+ bannedState+ "]";
     }
 }

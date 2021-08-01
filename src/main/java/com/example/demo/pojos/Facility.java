@@ -14,14 +14,6 @@ public class Facility {
 
     @Override
     public String toString() {
-        return "Facility [id="
-                + id
-                + ", bankId="
-                + bankId
-                + ", interestRate="
-                + interestRate
-                + ", amount="
-                + amount
-                + "]";
+        return "Facility [id="+ id+ ", bankId="+ bankId+ ", interestRate="+ interestRate+ ", amount="+ amount+ "]";
     }
 }
