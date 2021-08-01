@@ -4,22 +4,14 @@ import com.example.demo.pojos.Bank;
 import com.example.demo.pojos.Covenant;
 import com.example.demo.pojos.Facility;
 import com.example.demo.pojos.Loan;
-import com.opencsv.bean.CsvToBeanBuilder;
-import lombok.AccessLevel;
-import lombok.Getter;
-
-import java.io.FileReader;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class LoanService {
-    @Getter private List<Loan> loanList;
+//    @Getter private List<Loan> loanList;
 
     private BankService bankService;
     private CovenantService covenantService;
@@ -38,19 +30,6 @@ public class LoanService {
         facilities = facilityService.getFacilityList();
     }
 
-    private List<Loan> prepareLoansCsv(String csv){
-        List<Loan> loans = new ArrayList<>();
-        try {
-            loans = new CsvToBeanBuilder(new FileReader(csv))
-                    .withType(Loan.class)
-                    .build()
-                    .parse();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        loans.forEach(System.out::println);
-        return loans;
-    }
     public Facility sourceLoan(Loan loan) throws IllegalStateException {
         //1. get facility IDs from covenants where state is not banned and default rate < max default allowable
         Set<Integer> sanitizedFacilityIds = covenants.stream()
@@ -59,13 +38,16 @@ public class LoanService {
                 .map(Covenant::getFacilityId)
 				.collect(Collectors.toSet());
 
-        //TODO need to keep track of all facility's running sum of loans
-        //2. find facilities with lower interest rates
+        //2. find facilities with lower interest rates and where there is spare loan capacity
         Facility faciltyWithMinRate = facilities.stream()
                 .filter(facility -> facility.getInterestRate().compareTo(loan.getInterestRate()) < 0)
                 .filter(facility -> sanitizedFacilityIds.contains(facility.getId()))
+                .filter(facility -> loan.getAmount().compareTo(facilityService.getWorkingCapacityByFacilityId(facility.getId())) < 0)
                 .collect(Collectors.minBy(Comparator.comparing(Facility::getInterestRate)))
                 .orElseThrow(() -> new IllegalStateException("no suitable facility is found"));
+
+        BigDecimal adjustedCapacity = facilityService.adjustWorkingCapacityByFacilityId(faciltyWithMinRate.getId(), loan.getAmount());
+        if (adjustedCapacity.compareTo(new BigDecimal(0)) < 0) throw new IllegalArgumentException("facility's capacity should never be negative");
 
         return faciltyWithMinRate;
     }

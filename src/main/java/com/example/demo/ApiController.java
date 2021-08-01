@@ -57,6 +57,7 @@ public class ApiController {
             Facility sourcedFacility = loanService.sourceLoan(loan);
             assignmentService.writeAssignment(loan.getId(), sourcedFacility.getId());
             BigDecimal yield = loanService.calculateYield(loan, sourcedFacility.getInterestRate());
+
             System.out.println(String.format("==> yield calculated: %.2f", yield));
 
         } catch (IOException | IllegalStateException e) {
